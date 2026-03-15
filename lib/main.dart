@@ -61,49 +61,40 @@ class WebAppShell extends StatefulWidget {
 }
 
 class _WebAppShellState extends State<WebAppShell> {
-  late final WebViewController? _controller;
+  late final WebViewController _controller;
   bool _isLoading = true;
   String _currentUrl = kHomeUrl;
   String? _errorMessage;
-  bool _isSupported = true;
 
   @override
   void initState() {
     super.initState();
-    // Check if WebView is supported on this platform
-    if (defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      _isSupported = true;
-      _controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setNavigationDelegate(
-          NavigationDelegate(
-            onPageStarted: (url) {
-              setState(() {
-                _isLoading = true;
-                _currentUrl = url;
-                _errorMessage = null;
-              });
-            },
-            onPageFinished: (url) {
-              setState(() {
-                _isLoading = false;
-                _currentUrl = url;
-              });
-            },
-            onWebResourceError: (error) {
-              setState(() {
-                _isLoading = false;
-                _errorMessage = error.description;
-              });
-            },
-          ),
-        )
-        ..loadRequest(Uri.parse(kHomeUrl));
-    } else {
-      _isSupported = false;
-      _controller = null;
-    }
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (url) {
+            setState(() {
+              _isLoading = true;
+              _currentUrl = url;
+              _errorMessage = null;
+            });
+          },
+          onPageFinished: (url) {
+            setState(() {
+              _isLoading = false;
+              _currentUrl = url;
+            });
+          },
+          onWebResourceError: (error) {
+            setState(() {
+              _isLoading = false;
+              _errorMessage = error.description;
+            });
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(kHomeUrl));
   }
 
   /// Returns true if [url] is considered the "home" — i.e. it points to the
@@ -132,8 +123,6 @@ class _WebAppShellState extends State<WebAppShell> {
   }
 
   Future<bool> _onWillPop() async {
-    if (_controller == null) return true;
-
     // If we can go back in webview history → go back.
     if (await _controller.canGoBack()) {
       // But only if going back doesn't take us *off* the home page.
@@ -178,47 +167,6 @@ class _WebAppShellState extends State<WebAppShell> {
 
   @override
   Widget build(BuildContext context) {
-    // Show a message for unsupported platforms
-    if (!_isSupported) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Not Supported')),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.warning_rounded,
-                  size: 64,
-                  color: Colors.orange,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'WebView Not Supported',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'This app only supports Android and iOS.\n\nVisit the URL manually: $kHomeUrl',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.grey),
-                ),
-                const SizedBox(height: 24),
-                FilledButton.icon(
-                  onPressed: () {
-                    // Could add intent to open URL in browser here
-                  },
-                  icon: const Icon(Icons.open_in_browser),
-                  label: const Text('Open in Browser'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
