@@ -21,7 +21,7 @@ const String kAppName = 'Flutter';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Register the correct WebView platform implementation for each OS BEFORE any WebViewController usage.
+  // Register the correct WebView platform implementation for Android and iOS
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
       WebViewPlatform.instance = AndroidWebViewPlatform();
@@ -30,7 +30,6 @@ void main() {
       WebViewPlatform.instance = WebKitWebViewPlatform();
       break;
     default:
-      // For other platforms (Linux, macOS, Windows, Fuchsia, Web)
       break;
   }
 
@@ -201,7 +200,7 @@ class _WebAppShellState extends State<WebAppShell> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'This app requires WebView support, which is available on Android and iOS.\n\nVisit the URL manually: $kHomeUrl',
+                  'This app only supports Android and iOS.\n\nVisit the URL manually: $kHomeUrl',
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.grey),
                 ),
