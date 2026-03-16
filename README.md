@@ -2,9 +2,12 @@
 
 Converts any URL into a native iOS and Android app using Flutter's WebView.
 
-## Quick Start
+## Quick Guide
 
 ```bash
+# Clone the repo
+git clone "https://github.com/ameerhamzasaifi/Url_to_App.git"
+
 cd url_to_app
 
 # Set URL and app name (automatically updates pubspec.yaml)
