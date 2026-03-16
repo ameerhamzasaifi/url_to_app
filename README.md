@@ -1,4 +1,4 @@
-# url_to_app
+# Url_to_App
 
 Converts URLs into native iOS and Android apps. 
 (Using Flutter Framework)
@@ -7,7 +7,7 @@ Converts URLs into native iOS and Android apps.
 
 ```bash
 # Set URL and app name
-dart run scripts/set_url.dart https://example.com "My App"
+dart run scripts/set_url.dart https://example.com "App name"
 
 # Run the app
 flutter run
