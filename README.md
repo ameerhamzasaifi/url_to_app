@@ -13,7 +13,7 @@ cd url_to_app
 # Set URL and app name (automatically updates pubspec.yaml)
 dart run scripts/config.dart https://example.com "My App"
 
-# Run the app
+# Run the app (pls note only run in andriod and ios dives)
 flutter run
 ```
 
